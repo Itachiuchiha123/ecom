@@ -22,7 +22,7 @@ function displayOrderDetails(order) {
         itemsHtml += `
             <div class="summary-row">
                 <span>${item.product_name} x ${item.quantity}</span>
-                <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                <span>Rs ${(item.price * item.quantity).toFixed(2)}</span>
             </div>
         `;
     });
@@ -43,16 +43,16 @@ function displayOrderDetails(order) {
             
             <div class="summary-row">
                 <span>Subtotal</span>
-                <span>$${(order.total_amount - order.delivery_fee).toFixed(2)}</span>
+                <span>Rs ${(order.total_amount - order.delivery_fee).toFixed(2)}</span>
             </div>
             <div class="summary-row">
                 <span>Delivery Fee</span>
-                <span>$${parseFloat(order.delivery_fee).toFixed(2)}</span>
+                <span>Rs ${parseFloat(order.delivery_fee).toFixed(2)}</span>
             </div>
             
             <div class="summary-total">
                 <span>Total</span>
-                <span>$${parseFloat(order.total_amount).toFixed(2)}</span>
+                <span>Rs ${parseFloat(order.total_amount).toFixed(2)}</span>
             </div>
         </div>
     `;

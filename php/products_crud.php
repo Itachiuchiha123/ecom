@@ -40,14 +40,14 @@ function handleImageUpload($file, $existingImage = '')
     // Validate file type
     $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    
+
     // Use file extension as fallback for Windows compatibility
     $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    
+
     if (!in_array($extension, $allowedExtensions)) {
         return ['error' => 'Invalid file type. Only JPG, PNG, GIF, and WEBP images are allowed'];
     }
-    
+
     // Try to get mime type, use extension check as fallback
     if (function_exists('mime_content_type')) {
         $fileType = @mime_content_type($file['tmp_name']);

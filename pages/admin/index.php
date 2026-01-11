@@ -90,7 +90,7 @@ $conn->close();
 
             <div class="stat-card">
                 <h3>Total Revenue</h3>
-                <div class="stat-value">$<?php echo number_format($stats['revenue'], 2); ?></div>
+                <div class="stat-value">Rs <?php echo number_format($stats['revenue'], 2); ?></div>
             </div>
         </div>
 

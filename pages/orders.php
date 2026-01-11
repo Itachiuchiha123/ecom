@@ -33,7 +33,7 @@ if ($user) {
     while ($row = $result->fetch_assoc()) {
         // Get order items
         $order_id = $row['id'];
-        $items_sql = "SELECT oi.*, p.name as product_name 
+        $items_sql = "SELECT oi.*, p.name as product_name, p.image as product_image 
                       FROM order_items oi 
                       LEFT JOIN products p ON oi.product_id = p.id 
                       WHERE oi.order_id = ?";
@@ -140,9 +140,14 @@ if ($user) {
 
                         <div class="order-items-list">
                             <?php foreach ($order['items'] as $item): ?>
-                                <div class="summary-row">
-                                    <span><?php echo htmlspecialchars($item['product_name']); ?> x <?php echo $item['quantity']; ?></span>
-                                    <span>$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
+                                <div class="summary-row" style="display: flex; align-items: center; gap: 10px;">
+                                    <?php if (!empty($item['product_image']) && file_exists(__DIR__ . '/../public/images/products/' . $item['product_image'])): ?>
+                                        <img src="../public/images/products/<?php echo htmlspecialchars($item['product_image']); ?>" alt="<?php echo htmlspecialchars($item['product_name']); ?>" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                    <?php else: ?>
+                                        <div style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: #f0f0f0; border-radius: 4px; font-size: 24px;">🍰</div>
+                                    <?php endif; ?>
+                                    <span style="flex: 1;"><?php echo htmlspecialchars($item['product_name']); ?> x <?php echo $item['quantity']; ?></span>
+                                    <span>Rs <?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -151,7 +156,7 @@ if ($user) {
 
                         <div class="summary-total">
                             <span>Total</span>
-                            <span>$<?php echo number_format($order['total_amount'], 2); ?></span>
+                            <span>Rs <?php echo number_format($order['total_amount'], 2); ?></span>
                         </div>
                     </div>
                 <?php endforeach; ?>

@@ -75,19 +75,19 @@ if (isset($_SESSION['user_id'])) {
 
             <div class="summary-row">
                 <span>Subtotal</span>
-                <span id="subtotal">$0.00</span>
+                <span id="subtotal">Rs 0.00</span>
             </div>
 
             <div class="summary-row">
                 <span>Delivery Fee</span>
-                <span id="delivery">$3.99</span>
+                <span id="delivery">Rs 3.99</span>
             </div>
 
             <div class="summary-divider"></div>
 
             <div class="summary-total">
                 <span>Total</span>
-                <span id="total">$3.99</span>
+                <span id="total">Rs 3.99</span>
             </div>
 
             <button class="checkout-btn" onclick="checkout()">Checkout Now</button>

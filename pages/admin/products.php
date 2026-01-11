@@ -91,7 +91,7 @@ $conn->close();
                             <td><?php echo $product['id']; ?></td>
                             <td><?php echo htmlspecialchars($product['name']); ?></td>
                             <td><?php echo htmlspecialchars($product['category_name'] ?? 'N/A'); ?></td>
-                            <td>$<?php echo number_format($product['price'], 2); ?></td>
+                            <td>Rs <?php echo number_format($product['price'], 2); ?></td>
                             <td><?php echo $product['rating']; ?> ⭐</td>
                             <td>
                                 <div class="action-buttons">

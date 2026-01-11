@@ -87,7 +87,7 @@ $conn->close();
                                 <small><?php echo htmlspecialchars($order['customer_email']); ?></small>
                             </td>
                             <td><?php echo $order['item_count']; ?> items</td>
-                            <td>$<?php echo number_format($order['total_amount'], 2); ?></td>
+                            <td>Rs <?php echo number_format($order['total_amount'], 2); ?></td>
                             <td>
                                 <span class="badge <?php echo $order['status']; ?>">
                                     <?php echo ucfirst($order['status']); ?>

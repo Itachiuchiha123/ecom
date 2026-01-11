@@ -194,5 +194,5 @@ function showMessage(message, type = 'success') {
 
 // Format currency
 function formatCurrency(amount) {
-    return '$' + amount.toFixed(2);
+    return 'Rs ' + amount.toFixed(2);
 }

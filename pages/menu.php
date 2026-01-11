@@ -143,7 +143,7 @@ $conn->close();
                     </div>
                     <div class="product-info">
                         <div class="product-name"><?php echo htmlspecialchars($product['name']); ?></div>
-                        <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
+                        <div class="product-price">Rs <?php echo number_format($product['price'], 2); ?></div>
                         <button class="product-order-btn"
                             onclick="event.stopPropagation(); addToCart(<?php echo $product['id']; ?>, '<?php echo htmlspecialchars($product['name']); ?>', <?php echo $product['price']; ?>)">
                             Order Now

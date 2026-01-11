@@ -124,7 +124,7 @@ $conn->close();
             </div>
 
             <div class="product-detail-price">
-                $<?php echo number_format($product['price'], 2); ?>
+                Rs <?php echo number_format($product['price'], 2); ?>
             </div>
 
             <button class="add-to-cart-btn" onclick="addToCart(<?php echo $product['id']; ?>, '<?php echo htmlspecialchars($product['name']); ?>', <?php echo $product['price']; ?>)">
