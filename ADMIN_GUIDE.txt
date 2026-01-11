@@ -1,0 +1,202 @@
+# Admin Panel Guide
+
+## Accessing the Admin Panel
+
+1. **Login as Admin**
+   - Go to the homepage
+   - Click on "Login" button
+   - Select "Admin Login"
+   - Enter admin credentials
+   - You'll be redirected to the admin dashboard
+
+2. **Direct Access**
+   - URL: `http://localhost/ecommerce/pages/admin/index.php`
+   - Must be logged in as admin to access
+
+## Admin Dashboard Features
+
+### Dashboard Overview (`pages/admin/index.php`)
+- **Statistics Cards**: View total customers, products, orders, and revenue
+- **Quick Actions**: Access user, product, and order management pages
+
+---
+
+## User Management (`pages/admin/users.php`)
+
+### View Users
+- See all registered users in a table
+- Information displayed: ID, Name, Email, Phone, User Type, Registration Date
+- Users are sorted by newest first
+
+### Add New User
+1. Click the "+ Add User" button
+2. Fill in the form:
+   - Name (required)
+   - Email (required)
+   - Phone (optional)
+   - Address (optional)
+   - User Type: Customer, Admin, or Vendor (required)
+   - Password (required)
+3. Click "Save"
+
+### Edit User
+1. Click "Edit" button next to any user
+2. Modify the information
+3. Leave password field empty to keep existing password
+4. Enter new password to change it
+5. Click "Save"
+
+### Delete User
+1. Click "Delete" button next to any user
+2. Confirm deletion
+3. **Note**: You cannot delete your own admin account
+
+---
+
+## Product Management (`pages/admin/products.php`)
+
+### View Products
+- See all products in a table
+- Information displayed: ID, Name, Category, Price, Rating, Popular status
+- Products are sorted by newest first
+
+### Add New Product
+1. Click the "+ Add Product" button
+2. Fill in the form:
+   - Product Name (required)
+   - Description (optional)
+   - Price (required, must be greater than 0)
+   - Category (required, select from dropdown)
+   - Rating (0-5 stars, default: 0)
+   - Image Name (optional, e.g., chocolate-cake.jpg)
+   - Popular checkbox (check to mark as popular)
+3. Click "Save"
+
+### Edit Product
+1. Click "Edit" button next to any product
+2. Modify the product information
+3. Update pricing, ratings, or popular status
+4. Click "Save"
+
+### Delete Product
+1. Click "Delete" button next to any product
+2. Confirm deletion
+3. **Note**: Cannot delete products that are in existing orders
+
+---
+
+## Order Management (`pages/admin/orders.php`)
+
+### View Orders
+- See all customer orders in a table
+- Information displayed:
+  - Order ID
+  - Customer name and email
+  - Number of items
+  - Total amount
+  - Order status
+  - Order date and time
+- Orders are sorted by newest first
+
+### View Order Details
+1. Click "View" button next to any order
+2. See detailed information:
+   - Customer information
+   - Order status
+   - List of all items ordered
+   - Quantities and prices
+   - Subtotal, tax, delivery fee
+   - Total amount
+
+### Update Order Status
+1. Click "Update Status" button next to any order
+2. Select new status from dropdown:
+   - **Pending**: Order placed, waiting to be processed
+   - **Processing**: Order is being prepared
+   - **Delivered**: Order completed and delivered
+   - **Cancelled**: Order cancelled
+3. Click "Update"
+4. Order status is updated immediately
+
+---
+
+## Important Notes
+
+### Security
+- Only users with "admin" user type can access admin panel
+- Non-admin users are redirected to login page
+- All admin actions are authenticated
+
+### Data Integrity
+- Cannot delete your own admin account
+- Cannot delete products that exist in orders
+- Email addresses must be unique across all users
+
+### Navigation
+- Use the header navigation to switch between admin pages
+- Dashboard button returns to admin dashboard
+- Home/Menu buttons return to customer-facing pages
+
+### Best Practices
+1. **Regular Backups**: Backup your database regularly
+2. **User Management**: Only create admin accounts for trusted users
+3. **Product Updates**: Update product information carefully as it affects customer orders
+4. **Order Status**: Update order status promptly to keep customers informed
+
+---
+
+## Troubleshooting
+
+### Cannot Access Admin Panel
+- **Issue**: Redirected to login page
+- **Solution**: Make sure you're logged in with an admin account
+- Check user_type in database is set to 'admin'
+
+### Cannot Delete User/Product
+- **Issue**: Delete operation fails
+- **Solution**: 
+  - Cannot delete your own admin account
+  - Cannot delete products in existing orders
+  - Check database for foreign key constraints
+
+### Changes Not Appearing
+- **Issue**: Updates don't show
+- **Solution**: 
+  - Refresh the page after saving
+  - Check browser console for JavaScript errors
+  - Verify database connection
+
+---
+
+## Database Schema Reference
+
+### Users Table
+- `id`: User ID (auto-increment)
+- `name`: Full name
+- `email`: Email address (unique)
+- `password`: Hashed password
+- `phone`: Phone number
+- `address`: Delivery address
+- `user_type`: customer, admin, or vendor
+- `created_at`: Registration timestamp
+
+### Products Table
+- `id`: Product ID (auto-increment)
+- `name`: Product name
+- `description`: Product description
+- `price`: Product price (decimal)
+- `category_id`: Foreign key to categories
+- `image`: Image filename
+- `rating`: Product rating (0-5)
+- `is_popular`: Boolean flag
+- `created_at`: Creation timestamp
+
+### Orders Table
+- `id`: Order ID (auto-increment)
+- `user_id`: Foreign key to users
+- `total_amount`: Total order amount
+- `tax`: Tax amount
+- `delivery_fee`: Delivery charge
+- `status`: Order status
+- `delivery_address`: Delivery location
+- `created_at`: Order timestamp
