@@ -2,27 +2,39 @@
 require_once '../../php/config.php';
 require_once '../../php/auth.php';
 
-// Check if user is admin
-if (!isLoggedIn() || $_SESSION['user_type'] !== 'admin') {
-    header('Location: ../login.php?type=admin');
+// Check if user is vendor and approved
+if (!isLoggedIn() || $_SESSION['user_type'] !== 'vendor') {
+    header('Location: ../../index.php');
     exit;
 }
 
 $conn = getDBConnection();
+$vendor_id = $_SESSION['user_id'];
 
-// Fetch all products with category names
-$sql = "SELECT p.*, c.name as category_name 
-        FROM products p 
-        LEFT JOIN categories c ON p.category_id = c.id 
-        ORDER BY p.created_at DESC";
-$result = $conn->query($sql);
+// Check if approved
+$stmt = $conn->prepare("SELECT name, is_approved FROM users WHERE id = ?");
+$stmt->bind_param("i", $vendor_id);
+$stmt->execute();
+$vendor = $stmt->get_result()->fetch_assoc();
+
+if (!$vendor['is_approved']) {
+    header('Location: ../vendor-pending.php');
+    exit;
+}
+
+// Fetch vendor products with category names
+$sql = "SELECT p.*, c.name as category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id WHERE p.vendor_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $vendor_id);
+$stmt->execute();
+$result = $stmt->get_result();
 $products = [];
 while ($row = $result->fetch_assoc()) {
     $products[] = $row;
 }
 
 // Fetch categories for dropdown
-$categories_sql = "SELECT * FROM categories ORDER BY name";
+$categories_sql = "SELECT * FROM categories";
 $categories_result = $conn->query($categories_sql);
 $categories = [];
 while ($row = $categories_result->fetch_assoc()) {
@@ -37,7 +49,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Products - Admin</title>
+    <title>My Products - Vendor</title>
     <link rel="stylesheet" href="../../css/common.css">
     <link rel="stylesheet" href="../../css/admin.css">
 </head>
@@ -46,20 +58,19 @@ $conn->close();
     <header>
         <div class="logo">
             <span class="logo-icon">🍰</span>
-            <span>Macroon Morning - Admin</span>
+            <span>Macroon Morning - Vendor</span>
         </div>
 
         <nav>
             <a href="../../index.php">Home</a>
             <a href="../menu.php">Menu</a>
-            <a href="index.php">Dashboard</a>
-            <a href="vendors.php">Vendors</a>
+            <a href="index.php" class="active">My Products</a>
         </nav>
 
         <div class="login-dropdown">
             <div class="user-profile">
                 <div class="user-name" onclick="toggleUserDropdown()">
-                    Admin
+                    <?php echo htmlspecialchars($vendor['name']); ?>
                 </div>
                 <div class="dropdown-content" id="userDropdown">
                     <a href="#" onclick="logout(); return false;">Logout</a>
@@ -70,8 +81,8 @@ $conn->close();
 
     <div class="crud-container">
         <div class="crud-header">
-            <h1>Manage Products</h1>
-            <button class="add-btn" onclick="openAddModal()">+ Add Product</button>
+            <h1>My Products</h1>
+            <button class="add-btn" onclick="openAddModal()">Add New Product</button>
         </div>
 
         <div class="crud-table-container">
@@ -167,7 +178,7 @@ $conn->close();
     </div>
 
     <script src="../../js/main.js"></script>
-    <script src="../../js/admin-products.js"></script>
+    <script src="../../js/vendor-products.js"></script>
 </body>
 
 </html>

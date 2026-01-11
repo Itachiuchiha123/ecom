@@ -111,10 +111,22 @@ $user_type_label = ucfirst($user_type);
                         messageContainer.innerHTML = '<div class="message success">Login successful! Redirecting...</div>';
 
                         setTimeout(() => {
-                            window.location.href = '../index.php';
+                            // Redirect based on user type
+                            if (data.user.user_type === 'admin') {
+                                window.location.href = 'admin/index.php';
+                            } else if (data.user.user_type === 'vendor') {
+                                window.location.href = 'vendor/index.php';
+                            } else {
+                                window.location.href = '../index.php';
+                            }
                         }, 1000);
                     } else {
-                        messageContainer.innerHTML = '<div class="message error">' + data.message + '</div>';
+                        // Check if vendor is pending approval
+                        if (data.pending) {
+                            messageContainer.innerHTML = '<div class="message error">' + data.message + '</div>';
+                        } else {
+                            messageContainer.innerHTML = '<div class="message error">' + data.message + '</div>';
+                        }
                     }
                 })
                 .catch(error => {

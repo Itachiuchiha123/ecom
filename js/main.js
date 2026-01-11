@@ -162,8 +162,23 @@ window.onclick = function (event) {
 
 // Logout function
 function logout() {
+    event.preventDefault();
     User.logout();
-    window.location.href = '../php/logout_handler.php';
+
+    // Determine the correct path based on current location
+    const currentPath = window.location.pathname;
+    let logoutPath = '';
+
+    if (currentPath.includes('/pages/admin/')) {
+        logoutPath = '../../php/logout_handler.php';
+    } else if (currentPath.includes('/pages/')) {
+        logoutPath = '../php/logout_handler.php';
+    } else {
+        logoutPath = 'php/logout_handler.php';
+    }
+
+    window.location.href = logoutPath;
+    return false;
 }
 
 // Add to cart function

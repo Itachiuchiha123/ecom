@@ -54,7 +54,7 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                     <div class="dropdown-content" id="userDropdown">
                         <a href="pages/orders.php">My Orders</a>
-                        <a href="#" onclick="logout()">Logout</a>
+                        <a href="#" onclick="logout(); return false;">Logout</a>
                     </div>
                 </div>
             <?php else: ?>

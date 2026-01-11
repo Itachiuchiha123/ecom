@@ -128,11 +128,18 @@
                     const messageContainer = document.getElementById('messageContainer');
 
                     if (data.success) {
-                        messageContainer.innerHTML = '<div class="message success">Account created successfully! Redirecting to login...</div>';
-
-                        setTimeout(() => {
-                            window.location.href = 'login.php?type=customer';
-                        }, 2000);
+                        // Check if user is a vendor and needs approval
+                        if (data.user_type === 'vendor' && data.is_approved === 0) {
+                            messageContainer.innerHTML = '<div class="message success">Account created successfully! Redirecting to approval page...</div>';
+                            setTimeout(() => {
+                                window.location.href = 'vendor-pending.php';
+                            }, 2000);
+                        } else {
+                            messageContainer.innerHTML = '<div class="message success">Account created successfully! Redirecting to login...</div>';
+                            setTimeout(() => {
+                                window.location.href = 'login.php?type=customer';
+                            }, 2000);
+                        }
                     } else {
                         messageContainer.innerHTML = '<div class="message error">' + data.message + '</div>';
                     }

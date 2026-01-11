@@ -89,7 +89,7 @@ $conn->close();
                     </div>
                     <div class="dropdown-content" id="userDropdown">
                         <a href="orders.php">My Orders</a>
-                        <a href="#" onclick="logout()">Logout</a>
+                        <a href="#" onclick="logout(); return false;">Logout</a>
                     </div>
                 </div>
             <?php else: ?>

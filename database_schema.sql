@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20),
     address TEXT,
     user_type ENUM('customer', 'admin', 'vendor') DEFAULT 'customer',
+    is_approved BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -28,10 +29,12 @@ CREATE TABLE IF NOT EXISTS products (
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     category_id INT,
+    vendor_id INT,
     image VARCHAR(255),
     rating DECIMAL(2, 1) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (vendor_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- Orders table

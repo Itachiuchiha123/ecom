@@ -21,15 +21,18 @@ function signup($name, $email, $password, $phone, $address, $user_type = 'custom
     // Hash password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
+    // Set is_approved based on user_type (vendors need approval, others are auto-approved)
+    $is_approved = ($user_type === 'vendor') ? 0 : 1;
+
     // Insert new user
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password, phone, address, user_type) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $name, $email, $hashed_password, $phone, $address, $user_type);
+    $stmt = $conn->prepare("INSERT INTO users (name, email, password, phone, address, user_type, is_approved) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssi", $name, $email, $hashed_password, $phone, $address, $user_type, $is_approved);
 
     if ($stmt->execute()) {
         $user_id = $conn->insert_id;
         $stmt->close();
         $conn->close();
-        return ['success' => true, 'message' => 'Account created successfully', 'user_id' => $user_id];
+        return ['success' => true, 'message' => 'Account created successfully', 'user_id' => $user_id, 'user_type' => $user_type, 'is_approved' => $is_approved];
     } else {
         $stmt->close();
         $conn->close();
@@ -42,7 +45,7 @@ function login($email, $password, $user_type = 'customer')
 {
     $conn = getDBConnection();
 
-    $stmt = $conn->prepare("SELECT id, name, email, password, phone, address, user_type FROM users WHERE email = ? AND user_type = ?");
+    $stmt = $conn->prepare("SELECT id, name, email, password, phone, address, user_type, is_approved FROM users WHERE email = ? AND user_type = ?");
     $stmt->bind_param("ss", $email, $user_type);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -54,6 +57,13 @@ function login($email, $password, $user_type = 'customer')
     }
 
     $user = $result->fetch_assoc();
+
+    // Check if vendor is approved
+    if ($user['user_type'] === 'vendor' && !$user['is_approved']) {
+        $stmt->close();
+        $conn->close();
+        return ['success' => false, 'message' => 'Your account is pending approval. Please wait for admin approval.', 'pending' => true];
+    }
 
     // Verify password
     if (password_verify($password, $user['password'])) {
@@ -111,5 +121,14 @@ function getCurrentUser()
 // Logout
 function logout()
 {
+    // Unset all session variables
+    $_SESSION = array();
+
+    // Destroy the session cookie
+    if (isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), '', time() - 3600, '/');
+    }
+
+    // Destroy the session
     session_destroy();
 }

@@ -46,6 +46,7 @@ $conn->close();
             <a href="../../index.php">Home</a>
             <a href="../menu.php">Menu</a>
             <a href="index.php">Dashboard</a>
+            <a href="vendors.php">Vendors</a>
         </nav>
 
         <div class="login-dropdown">
@@ -54,7 +55,7 @@ $conn->close();
                     Admin
                 </div>
                 <div class="dropdown-content" id="userDropdown">
-                    <a href="#" onclick="logout()">Logout</a>
+                    <a href="#" onclick="logout(); return false;">Logout</a>
                 </div>
             </div>
         </div>
